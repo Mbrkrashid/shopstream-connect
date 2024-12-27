@@ -11,53 +11,84 @@ import { useQuery } from "@tanstack/react-query";
 // Fetch featured video content
 const fetchFeaturedVideo = async () => {
   console.log("Fetching featured video...");
-  const { data, error } = await supabase
-    .from('video_content')
-    .select()
-    .order('views_count', { ascending: false })
-    .limit(1)
-    .maybeSingle();
-  
-  if (error) {
-    console.error("Error fetching featured video:", error);
+  try {
+    const { data, error } = await supabase
+      .from('video_content')
+      .select('id, title, video_url, views_count')
+      .order('views_count', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    
+    if (error) {
+      console.error("Error fetching featured video:", error);
+      throw error;
+    }
+    
+    console.log("Featured video data:", data);
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch featured video:", error);
     throw error;
   }
-  console.log("Featured video data:", data);
-  return data;
 };
 
 // Fetch sponsored brand campaign
 const fetchSponsoredCampaign = async () => {
   console.log("Fetching sponsored campaign...");
-  const { data, error } = await supabase
-    .from('brand_campaigns')
-    .select()
-    .eq('status', 'active')
-    .order('budget', { ascending: false })
-    .limit(1)
-    .maybeSingle();
-  
-  if (error) {
-    console.error("Error fetching sponsored campaign:", error);
+  try {
+    const { data, error } = await supabase
+      .from('brand_campaigns')
+      .select('id, campaign_title, description, budget')
+      .eq('status', 'active')
+      .order('budget', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    
+    if (error) {
+      console.error("Error fetching sponsored campaign:", error);
+      throw error;
+    }
+    
+    console.log("Sponsored campaign data:", data);
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch sponsored campaign:", error);
     throw error;
   }
-  console.log("Sponsored campaign data:", data);
-  return data;
 };
 
 export default function Index() {
   const { user } = useAuthContext();
   const [isVideoVisible, setIsVideoVisible] = useState(false);
 
-  const { data: featuredVideo, isError: isVideoError } = useQuery({
+  const { 
+    data: featuredVideo, 
+    isError: isVideoError,
+    error: videoError 
+  } = useQuery({
     queryKey: ['featuredVideo'],
     queryFn: fetchFeaturedVideo,
+    retry: 1,
   });
 
-  const { data: sponsoredCampaign, isError: isCampaignError } = useQuery({
+  const { 
+    data: sponsoredCampaign, 
+    isError: isCampaignError,
+    error: campaignError 
+  } = useQuery({
     queryKey: ['sponsoredCampaign'],
     queryFn: fetchSponsoredCampaign,
+    retry: 1,
   });
+
+  useEffect(() => {
+    if (isVideoError) {
+      console.error('Video fetch error:', videoError);
+    }
+    if (isCampaignError) {
+      console.error('Campaign fetch error:', campaignError);
+    }
+  }, [isVideoError, isCampaignError, videoError, campaignError]);
 
   useEffect(() => {
     // Trigger video visibility after a delay
