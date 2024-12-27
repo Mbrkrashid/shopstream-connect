@@ -7,6 +7,7 @@ import { useAuthContext } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Star, Sparkles, Gift } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "@/components/ui/use-toast";
 
 // Fetch featured video content
 const fetchFeaturedVideo = async () => {
@@ -69,6 +70,14 @@ export default function Index() {
     queryKey: ['featuredVideo'],
     queryFn: fetchFeaturedVideo,
     retry: 1,
+    onError: (error) => {
+      console.error('Video fetch error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load featured video",
+        variant: "destructive",
+      });
+    }
   });
 
   const { 
@@ -79,6 +88,14 @@ export default function Index() {
     queryKey: ['sponsoredCampaign'],
     queryFn: fetchSponsoredCampaign,
     retry: 1,
+    onError: (error) => {
+      console.error('Campaign fetch error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load sponsored campaign",
+        variant: "destructive",
+      });
+    }
   });
 
   useEffect(() => {
