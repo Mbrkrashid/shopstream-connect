@@ -62,7 +62,7 @@ export default function Index() {
   const [isVideoVisible, setIsVideoVisible] = useState(false);
 
   const { 
-    data: featuredVideo, 
+    data: featuredVideo,
     isError: isVideoError,
     error: videoError 
   } = useQuery({
@@ -72,7 +72,7 @@ export default function Index() {
   });
 
   const { 
-    data: sponsoredCampaign, 
+    data: sponsoredCampaign,
     isError: isCampaignError,
     error: campaignError 
   } = useQuery({
