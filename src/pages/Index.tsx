@@ -91,7 +91,6 @@ export default function Index() {
   }, [isVideoError, isCampaignError, videoError, campaignError]);
 
   useEffect(() => {
-    // Trigger video visibility after a delay
     const timer = setTimeout(() => setIsVideoVisible(true), 500);
     return () => clearTimeout(timer);
   }, []);
