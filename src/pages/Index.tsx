@@ -1,8 +1,12 @@
 import Navbar from "@/components/Navbar";
 import ProductGrid from "@/components/ProductGrid";
+import { VideoUpload } from "@/components/VideoUpload";
 import { Button } from "@/components/ui/button";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 export default function Index() {
+  const { user } = useAuthContext();
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -20,6 +24,13 @@ export default function Index() {
             <Button size="lg" variant="outline">Learn More</Button>
           </div>
         </div>
+
+        {user?.is_vendor && (
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold mb-4">Upload Product Video</h2>
+            <VideoUpload />
+          </section>
+        )}
 
         <section className="mb-12">
           <div className="flex justify-between items-center mb-6">

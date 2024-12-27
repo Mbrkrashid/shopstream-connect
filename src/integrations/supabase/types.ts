@@ -449,6 +449,35 @@ export type Database = {
           },
         ]
       }
+      vendor_followers: {
+        Row: {
+          created_at: string | null
+          follower_id: string
+          id: string
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          follower_id: string
+          id?: string
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string | null
+          follower_id?: string
+          id?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_followers_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vendor_promotions: {
         Row: {
           ad_format: string | null
@@ -619,6 +648,8 @@ export type Database = {
           description: string | null
           id: string
           likes_count: number | null
+          music_title: string | null
+          music_url: string | null
           shares_count: number | null
           thumbnail_url: string | null
           title: string
@@ -632,6 +663,8 @@ export type Database = {
           description?: string | null
           id?: string
           likes_count?: number | null
+          music_title?: string | null
+          music_url?: string | null
           shares_count?: number | null
           thumbnail_url?: string | null
           title: string
@@ -645,6 +678,8 @@ export type Database = {
           description?: string | null
           id?: string
           likes_count?: number | null
+          music_title?: string | null
+          music_url?: string | null
           shares_count?: number | null
           thumbnail_url?: string | null
           title?: string
@@ -688,6 +723,35 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "video_interactions_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "video_content"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      video_likes: {
+        Row: {
+          created_at: string | null
+          id: string
+          user_id: string
+          video_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          user_id: string
+          video_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          user_id?: string
+          video_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_likes_video_id_fkey"
             columns: ["video_id"]
             isOneToOne: false
             referencedRelation: "video_content"
