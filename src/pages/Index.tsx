@@ -10,28 +10,38 @@ import { useQuery } from "@tanstack/react-query";
 
 // Fetch featured video content
 const fetchFeaturedVideo = async () => {
+  console.log("Fetching featured video...");
   const { data, error } = await supabase
     .from('video_content')
-    .select('*')
+    .select()
     .order('views_count', { ascending: false })
     .limit(1)
-    .single();
+    .maybeSingle();
   
-  if (error) throw error;
+  if (error) {
+    console.error("Error fetching featured video:", error);
+    throw error;
+  }
+  console.log("Featured video data:", data);
   return data;
 };
 
 // Fetch sponsored brand campaign
 const fetchSponsoredCampaign = async () => {
+  console.log("Fetching sponsored campaign...");
   const { data, error } = await supabase
     .from('brand_campaigns')
-    .select('*')
+    .select()
     .eq('status', 'active')
     .order('budget', { ascending: false })
     .limit(1)
-    .single();
+    .maybeSingle();
   
-  if (error) throw error;
+  if (error) {
+    console.error("Error fetching sponsored campaign:", error);
+    throw error;
+  }
+  console.log("Sponsored campaign data:", data);
   return data;
 };
 
@@ -39,12 +49,12 @@ export default function Index() {
   const { user } = useAuthContext();
   const [isVideoVisible, setIsVideoVisible] = useState(false);
 
-  const { data: featuredVideo } = useQuery({
+  const { data: featuredVideo, isError: isVideoError } = useQuery({
     queryKey: ['featuredVideo'],
     queryFn: fetchFeaturedVideo,
   });
 
-  const { data: sponsoredCampaign } = useQuery({
+  const { data: sponsoredCampaign, isError: isCampaignError } = useQuery({
     queryKey: ['sponsoredCampaign'],
     queryFn: fetchSponsoredCampaign,
   });
@@ -62,7 +72,7 @@ export default function Index() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section with Background Video */}
         <div className="relative h-[70vh] mb-12 rounded-xl overflow-hidden">
-          {featuredVideo && (
+          {featuredVideo && featuredVideo.video_url && (
             <video
               autoPlay
               muted
