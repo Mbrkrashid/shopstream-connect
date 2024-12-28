@@ -353,6 +353,30 @@ export type Database = {
         }
         Relationships: []
       }
+      support_chat_history: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_ai: boolean | null
+          message: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_ai?: boolean | null
+          message: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_ai?: boolean | null
+          message?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       support_tickets: {
         Row: {
           assigned_to: string | null
@@ -397,6 +421,8 @@ export type Database = {
           customer_id: string | null
           id: string
           metadata: Json | null
+          opay_payment_status: string | null
+          opay_reference_id: string | null
           opay_transaction_id: string | null
           payment_method: string | null
           product_id: string | null
@@ -411,6 +437,8 @@ export type Database = {
           customer_id?: string | null
           id?: string
           metadata?: Json | null
+          opay_payment_status?: string | null
+          opay_reference_id?: string | null
           opay_transaction_id?: string | null
           payment_method?: string | null
           product_id?: string | null
@@ -425,6 +453,8 @@ export type Database = {
           customer_id?: string | null
           id?: string
           metadata?: Json | null
+          opay_payment_status?: string | null
+          opay_reference_id?: string | null
           opay_transaction_id?: string | null
           payment_method?: string | null
           product_id?: string | null
