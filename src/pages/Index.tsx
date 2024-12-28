@@ -9,8 +9,23 @@ import { Star, Sparkles, Gift } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
 
+// Define types for our query responses
+type FeaturedVideo = {
+  id: string;
+  title: string;
+  video_url: string;
+  views_count: number;
+};
+
+type SponsoredCampaign = {
+  id: string;
+  campaign_title: string;
+  description: string | null;
+  budget: number;
+};
+
 // Fetch featured video content
-const fetchFeaturedVideo = async () => {
+const fetchFeaturedVideo = async (): Promise<FeaturedVideo | null> => {
   console.log("Fetching featured video...");
   try {
     const { data, error } = await supabase
@@ -34,7 +49,7 @@ const fetchFeaturedVideo = async () => {
 };
 
 // Fetch sponsored brand campaign
-const fetchSponsoredCampaign = async () => {
+const fetchSponsoredCampaign = async (): Promise<SponsoredCampaign | null> => {
   console.log("Fetching sponsored campaign...");
   try {
     const { data, error } = await supabase
