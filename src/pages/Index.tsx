@@ -14,6 +14,7 @@ const fetchFeaturedVideo = async () => {
   console.log("Fetching featured video...");
   try {
     const { data, error } = await supabase
+      .schema('public')
       .from('video_content')
       .select('id, title, video_url, views_count')
       .order('views_count', { ascending: false })
@@ -38,6 +39,7 @@ const fetchSponsoredCampaign = async () => {
   console.log("Fetching sponsored campaign...");
   try {
     const { data, error } = await supabase
+      .schema('public')
       .from('brand_campaigns')
       .select('id, campaign_title, description, budget')
       .eq('status', 'active')
