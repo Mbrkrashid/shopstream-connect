@@ -8,17 +8,16 @@ import { supabase } from "@/integrations/supabase/client";
 import { Star, Sparkles, Gift } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
+import { Database } from "@/integrations/supabase/types";
 
 // Define types for our query responses
-type FeaturedVideo = {
-  id: string;
+type FeaturedVideo = Database['public']['Tables']['video_content']['Row'] & {
   title: string;
   video_url: string;
   views_count: number;
 };
 
-type SponsoredCampaign = {
-  id: string;
+type SponsoredCampaign = Database['public']['Tables']['brand_campaigns']['Row'] & {
   campaign_title: string;
   description: string | null;
   budget: number;
@@ -29,7 +28,7 @@ const fetchFeaturedVideo = async (): Promise<FeaturedVideo | null> => {
   console.log("Fetching featured video...");
   try {
     const { data, error } = await supabase
-      .from('api.video_content')
+      .from('video_content')
       .select('id, title, video_url, views_count')
       .order('views_count', { ascending: false })
       .limit(1)
@@ -53,7 +52,7 @@ const fetchSponsoredCampaign = async (): Promise<SponsoredCampaign | null> => {
   console.log("Fetching sponsored campaign...");
   try {
     const { data, error } = await supabase
-      .from('api.brand_campaigns')
+      .from('brand_campaigns')
       .select('id, campaign_title, description, budget')
       .eq('status', 'active')
       .order('budget', { ascending: false })
