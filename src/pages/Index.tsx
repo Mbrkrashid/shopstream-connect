@@ -21,6 +21,7 @@ const fetchFeaturedVideo = async (): Promise<FeaturedVideo | null> => {
   console.log("Fetching featured video...");
   try {
     const { data, error } = await supabase
+      .schema('public')
       .from('video_content')
       .select('*')
       .order('views_count', { ascending: false })
@@ -45,6 +46,7 @@ const fetchSponsoredCampaign = async (): Promise<SponsoredCampaign | null> => {
   console.log("Fetching sponsored campaign...");
   try {
     const { data, error } = await supabase
+      .schema('public')
       .from('brand_campaigns')
       .select('*')
       .eq('status', 'active')
