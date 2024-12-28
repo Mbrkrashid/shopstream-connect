@@ -14,7 +14,7 @@ const fetchFeaturedVideo = async () => {
   console.log("Fetching featured video...");
   try {
     const { data, error } = await supabase
-      .from('api.video_content')
+      .from('video_content')
       .select('id, title, video_url, views_count')
       .order('views_count', { ascending: false })
       .limit(1)
@@ -38,7 +38,7 @@ const fetchSponsoredCampaign = async () => {
   console.log("Fetching sponsored campaign...");
   try {
     const { data, error } = await supabase
-      .from('api.brand_campaigns')
+      .from('brand_campaigns')
       .select('id, campaign_title, description, budget')
       .eq('status', 'active')
       .order('budget', { ascending: false })
@@ -113,7 +113,7 @@ export default function Index() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section with Background Video */}
         <div className="relative h-[70vh] mb-12 rounded-xl overflow-hidden">
-          {featuredVideo && featuredVideo.video_url && (
+          {featuredVideo?.video_url && (
             <video
               autoPlay
               muted
@@ -187,4 +187,4 @@ export default function Index() {
       </main>
     </div>
   );
-};
+}
