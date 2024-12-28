@@ -10,18 +10,11 @@ import { useQuery } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
 import { Database } from "@/integrations/supabase/types";
 
-// Define types for our query responses
-type FeaturedVideo = Database['public']['Tables']['video_content']['Row'] & {
-  title: string;
-  video_url: string;
-  views_count: number;
-};
+type VideoContent = Database['public']['Tables']['video_content']['Row'];
+type BrandCampaign = Database['public']['Tables']['brand_campaigns']['Row'];
 
-type SponsoredCampaign = Database['public']['Tables']['brand_campaigns']['Row'] & {
-  campaign_title: string;
-  description: string | null;
-  budget: number;
-};
+type FeaturedVideo = VideoContent;
+type SponsoredCampaign = BrandCampaign;
 
 // Fetch featured video content
 const fetchFeaturedVideo = async (): Promise<FeaturedVideo | null> => {
@@ -29,7 +22,7 @@ const fetchFeaturedVideo = async (): Promise<FeaturedVideo | null> => {
   try {
     const { data, error } = await supabase
       .from('video_content')
-      .select('id, title, video_url, views_count')
+      .select('*')
       .order('views_count', { ascending: false })
       .limit(1)
       .maybeSingle();
@@ -53,7 +46,7 @@ const fetchSponsoredCampaign = async (): Promise<SponsoredCampaign | null> => {
   try {
     const { data, error } = await supabase
       .from('brand_campaigns')
-      .select('id, campaign_title, description, budget')
+      .select('*')
       .eq('status', 'active')
       .order('budget', { ascending: false })
       .limit(1)
