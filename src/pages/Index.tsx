@@ -69,15 +69,7 @@ export default function Index() {
   } = useQuery({
     queryKey: ['featuredVideo'],
     queryFn: fetchFeaturedVideo,
-    retry: 1,
-    onError: (error) => {
-      console.error('Video fetch error:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load featured video",
-        variant: "destructive",
-      });
-    }
+    retry: 1
   });
 
   const { 
@@ -87,23 +79,25 @@ export default function Index() {
   } = useQuery({
     queryKey: ['sponsoredCampaign'],
     queryFn: fetchSponsoredCampaign,
-    retry: 1,
-    onError: (error) => {
-      console.error('Campaign fetch error:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load sponsored campaign",
-        variant: "destructive",
-      });
-    }
+    retry: 1
   });
 
   useEffect(() => {
     if (isVideoError) {
       console.error('Video fetch error:', videoError);
+      toast({
+        title: "Error",
+        description: "Failed to load featured video",
+        variant: "destructive",
+      });
     }
     if (isCampaignError) {
       console.error('Campaign fetch error:', campaignError);
+      toast({
+        title: "Error",
+        description: "Failed to load sponsored campaign",
+        variant: "destructive",
+      });
     }
   }, [isVideoError, isCampaignError, videoError, campaignError]);
 
@@ -193,4 +187,4 @@ export default function Index() {
       </main>
     </div>
   );
-}
+};
