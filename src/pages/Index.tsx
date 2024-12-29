@@ -4,7 +4,7 @@ import ProductGrid from "@/components/ProductGrid";
 import { VideoUpload } from "@/components/VideoUpload";
 import { Button } from "@/components/ui/button";
 import { useAuthContext } from "@/contexts/AuthContext";
-import { Star, Sparkles, Gift, Award, Gem } from "lucide-react";
+import { Star, Sparkles, Gift, Award, Gem, Upload } from "lucide-react";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
