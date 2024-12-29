@@ -47,6 +47,44 @@ export type Database = {
           },
         ]
       }
+      ad_revenue: {
+        Row: {
+          amount: number
+          created_at: string | null
+          currency: string
+          id: string
+          revenue_type: string
+          updated_at: string | null
+          video_id: string | null
+        }
+        Insert: {
+          amount?: number
+          created_at?: string | null
+          currency?: string
+          id?: string
+          revenue_type: string
+          updated_at?: string | null
+          video_id?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          currency?: string
+          id?: string
+          revenue_type?: string
+          updated_at?: string | null
+          video_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ad_revenue_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "video_content"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       brand_campaigns: {
         Row: {
           ad_placement: string | null
@@ -421,8 +459,10 @@ export type Database = {
           customer_id: string | null
           id: string
           metadata: Json | null
+          opay_payment_method: string | null
           opay_payment_status: string | null
           opay_reference_id: string | null
+          opay_transaction_details: Json | null
           opay_transaction_id: string | null
           payment_method: string | null
           product_id: string | null
@@ -437,8 +477,10 @@ export type Database = {
           customer_id?: string | null
           id?: string
           metadata?: Json | null
+          opay_payment_method?: string | null
           opay_payment_status?: string | null
           opay_reference_id?: string | null
+          opay_transaction_details?: Json | null
           opay_transaction_id?: string | null
           payment_method?: string | null
           product_id?: string | null
@@ -453,8 +495,10 @@ export type Database = {
           customer_id?: string | null
           id?: string
           metadata?: Json | null
+          opay_payment_method?: string | null
           opay_payment_status?: string | null
           opay_reference_id?: string | null
+          opay_transaction_details?: Json | null
           opay_transaction_id?: string | null
           payment_method?: string | null
           product_id?: string | null
@@ -512,6 +556,8 @@ export type Database = {
         Row: {
           ad_format: string | null
           ad_placement: string | null
+          ad_placement_type: string | null
+          bid_amount: number | null
           budget: number | null
           clicks_count: number | null
           created_at: string | null
@@ -527,6 +573,7 @@ export type Database = {
           start_date: string
           status: string | null
           target_audience: string | null
+          target_demographics: Json | null
           targeting_criteria: Json | null
           updated_at: string | null
           vendor_id: string | null
@@ -535,6 +582,8 @@ export type Database = {
         Insert: {
           ad_format?: string | null
           ad_placement?: string | null
+          ad_placement_type?: string | null
+          bid_amount?: number | null
           budget?: number | null
           clicks_count?: number | null
           created_at?: string | null
@@ -550,6 +599,7 @@ export type Database = {
           start_date: string
           status?: string | null
           target_audience?: string | null
+          target_demographics?: Json | null
           targeting_criteria?: Json | null
           updated_at?: string | null
           vendor_id?: string | null
@@ -558,6 +608,8 @@ export type Database = {
         Update: {
           ad_format?: string | null
           ad_placement?: string | null
+          ad_placement_type?: string | null
+          bid_amount?: number | null
           budget?: number | null
           clicks_count?: number | null
           created_at?: string | null
@@ -573,6 +625,7 @@ export type Database = {
           start_date?: string
           status?: string | null
           target_audience?: string | null
+          target_demographics?: Json | null
           targeting_criteria?: Json | null
           updated_at?: string | null
           vendor_id?: string | null

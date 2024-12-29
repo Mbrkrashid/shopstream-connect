@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import { Select } from "./ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Upload } from "lucide-react";
@@ -11,6 +12,8 @@ export function VideoUpload() {
   const [video, setVideo] = useState<File | null>(null);
   const [music, setMusic] = useState<File | null>(null);
   const [musicTitle, setMusicTitle] = useState("");
+  const [adPlacement, setAdPlacement] = useState("pre_roll");
+  const [bidAmount, setBidAmount] = useState("");
   const { toast } = useToast();
 
   const handleVideoUpload = async () => {
@@ -57,15 +60,37 @@ export function VideoUpload() {
       }
 
       // Create video content record
-      const { error: dbError } = await supabase.from("video_content").insert({
-        title: video.name.split(".")[0],
-        video_url: videoData.publicUrl,
-        music_url: musicUrl,
-        music_title: musicTitle,
-        vendor_id: (await supabase.auth.getUser()).data.user?.id,
-      });
+      const { data: videoContent, error: dbError } = await supabase
+        .from("video_content")
+        .insert({
+          title: video.name.split(".")[0],
+          video_url: videoData.publicUrl,
+          music_url: musicUrl,
+          music_title: musicTitle,
+          vendor_id: (await supabase.auth.getUser()).data.user?.id,
+        })
+        .select()
+        .single();
 
       if (dbError) throw dbError;
+
+      // Create promotion record for ads
+      if (bidAmount && videoContent) {
+        const { error: promotionError } = await supabase
+          .from("vendor_promotions")
+          .insert({
+            vendor_id: (await supabase.auth.getUser()).data.user?.id,
+            product_id: null, // This can be linked to a product if needed
+            promotion_type: "video_ad",
+            ad_placement_type: adPlacement,
+            bid_amount: parseFloat(bidAmount),
+            start_date: new Date().toISOString(),
+            end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
+            status: "active",
+          });
+
+        if (promotionError) throw promotionError;
+      }
 
       toast({
         title: "Success",
@@ -76,6 +101,7 @@ export function VideoUpload() {
       setVideo(null);
       setMusic(null);
       setMusicTitle("");
+      setBidAmount("");
     } catch (error: any) {
       toast({
         title: "Error",
@@ -116,6 +142,33 @@ export function VideoUpload() {
           value={musicTitle}
           onChange={(e) => setMusicTitle(e.target.value)}
           placeholder="Enter music title"
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="adPlacement">Ad Placement</Label>
+        <select
+          id="adPlacement"
+          value={adPlacement}
+          onChange={(e) => setAdPlacement(e.target.value)}
+          className="w-full border rounded-md p-2"
+        >
+          <option value="pre_roll">Pre-Roll</option>
+          <option value="mid_roll">Mid-Roll</option>
+          <option value="post_roll">Post-Roll</option>
+          <option value="banner">Banner</option>
+          <option value="overlay">Overlay</option>
+        </select>
+      </div>
+
+      <div>
+        <Label htmlFor="bidAmount">Bid Amount (NGN)</Label>
+        <Input
+          id="bidAmount"
+          type="number"
+          value={bidAmount}
+          onChange={(e) => setBidAmount(e.target.value)}
+          placeholder="Enter bid amount"
         />
       </div>
 

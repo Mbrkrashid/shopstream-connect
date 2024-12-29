@@ -5,6 +5,9 @@ import { VideoUpload } from "@/components/VideoUpload";
 import { Button } from "@/components/ui/button";
 import { useAuthContext } from "@/contexts/AuthContext";
 import { Star, Sparkles, Gift } from "lucide-react";
+import { Auth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function Index() {
   const { user } = useAuthContext();
@@ -14,6 +17,23 @@ export default function Index() {
     const timer = setTimeout(() => setIsVideoVisible(true), 500);
     return () => clearTimeout(timer);
   }, []);
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <div className="max-w-md w-full">
+          <h1 className="text-2xl font-bold text-center mb-8">Welcome to Our Platform</h1>
+          <Auth
+            supabaseClient={supabase}
+            appearance={{ theme: ThemeSupa }}
+            providers={["google"]}
+            redirectTo={window.location.origin}
+            theme="light"
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
